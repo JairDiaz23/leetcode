@@ -13,9 +13,10 @@ public class MaxNumberMoves {
 
     public static void main(String[] args) {
         int[][] grid = {
-                {3,2,4},
-                {2,1,9},
-                {1,1,7}
+                {2,4,3,5},
+                {5,4,9,3},
+                {3,4,2,11},
+                {10,9,13,15}
         };
         System.out.println(maxMoves(grid)); // Output: 3
     }
@@ -25,17 +26,22 @@ public class MaxNumberMoves {
         int maxMoves = 0;
         int row = 0;
         int column = 0;
-        while (row < grid.length) {
+        while (row < grid.length && column < grid[0].length) {
             while (column < grid[0].length) {
+                System.out.println("row: " + row + ", column: " + column);
                 int currentItem = grid[row][column];
                 if (row > 0) { // (prevent indexOutOfBound).
-
+                    getAboveRightCell(grid, row, column);
+                    maxMoves++;
+                    row--;
+                    column++;
+                    break;
                 }
                 int nextRightItem = getRightCell(grid, row, column);
                 if (nextRightItem > currentItem) {
                     maxMoves++;
                     column++;
-                    continue;
+                    break;
                 }
                 int belowRightItem = getBelowRightCell(grid, row, column);
                 if (belowRightItem > currentItem) {
@@ -48,6 +54,15 @@ public class MaxNumberMoves {
             }
         }
         return maxMoves;
+    }
+
+    private static int getAboveRightCell(int[][] grid, int row, int col) {
+        final int colSize = grid[0].length - 1;
+        if (col < colSize) {
+            System.out.println("currentCell: " + grid[row][col] + "aboveRightCell: " + grid[row][col + 1]);
+            return grid[row - 1][col + 1];
+        }
+        return 0;
     }
 
     private static int getRightCell(int[][] grid, int row, int col) {
